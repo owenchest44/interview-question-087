@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="header-section">
+    <h2>ระบบจัดการข้อมูลพนักงาน (Employee Management)</h2>
+    <button class="btn btn-primary" (click)="showModal = true; isViewMode = false; formData = {}">
+      <i class="content-add"></i> + เพิ่มพนักงานใหม่
+    </button>
+  </div>
+
+  <div class="card">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>ลำดับ</th>
+          <th>ชื่อ-สกุล</th>
+          <th>วันเกิด</th>
+          <th>อายุ</th>
+          <th style="text-align: center;">จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emp of employees; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td class="text-bold">{{ emp.fullName }}</td>
+          <td>{{ emp.birthDate }}</td>
+          <td>{{ emp.age }} ปี</td>
+          <td style="text-align: center;">
+            <button class="btn btn-view" (click)="openViewModal(emp)">ดูข้อมูล</button>
+          </td>
+        </tr>
+        <tr *ngIf="employees?.length === 0">
+          <td colspan="5" style="text-align: center; color: #888; padding: 30px;">
+            ไม่พบข้อมูลพนักงานในระบบ
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="showModal" class="modal-overlay">
+  <div class="modal-content animate-fade-in">
+    <div class="modal-header">
+      <h3>{{ isViewMode ? '🔍 รายละเอียดข้อมูลพนักงาน' : '📝 เพิ่มข้อมูลพนักงานใหม่' }}</h3>
+      <button class="close-x" (click)="showModal = false">&times;</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="form-group">
+        <label>ชื่อ-สกุล:</label>
+        <input type="text" [(ngModel)]="formData.fullName" placeholder="กรอกชื่อ - นามสกุล" [disabled]="isViewMode" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>วันเกิด:</label>
+        <input type="date" [(ngModel)]="formData.birthDate" [disabled]="isViewMode" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>ที่อยู่:</label>
+        <textarea [(ngModel)]="formData.address" placeholder="กรอกที่อยู่ปัจจุบัน" [disabled]="isViewMode" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button *ngIf="!isViewMode" class="btn btn-success" (click)="save()">บันทึกข้อมูล</button>
+      <button class="btn btn-secondary" (click)="showModal = false">{{ isViewMode ? 'ปิดหน้าต่าง' : 'ยกเลิก' }}</button>
+    </div>
+  </div>
+</div>
